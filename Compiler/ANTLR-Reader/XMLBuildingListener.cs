@@ -3,7 +3,7 @@ using System.Xml.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
-using org.redsl.antlr;
+using org.ReDSL.Parser;
 using System.Collections.Generic;
 
 
