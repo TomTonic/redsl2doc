@@ -1,0 +1,19 @@
+
+    package "default"
+    §7 {
+        hallo erde!
+        sdsdsd $asdsd fsdf sdfdf \$ dsdhi \\$ # comment after math
+
+        sdfsdfsf (siehe §das) sdffsdf
+        # comment line inbetween
+        dsfsdf # dfsdfffsd
+
+        Rationale:
+        dfsdf sdfsf
+
+        asg sdiu hp
+    }
+    §das{
+        # only a comment
+    }
+    package "blub"
