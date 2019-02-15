@@ -1,0 +1,15 @@
+file "\\ " {
+    package "default"
+    §7 {
+        hallo erde!
+        sdsdsd $asdsd fsdf sdfdf \$ dsdhi \\$ # comment after math
+
+        sdfsdfsf sdffsdf
+        # comment line inbetween
+        dsfsdf # dfsdfffsd
+    }
+    §das{
+        # only a comment
+    }
+    package "blub"
+}
