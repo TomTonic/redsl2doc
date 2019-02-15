@@ -1,0 +1,26 @@
+﻿file "/home/Tom/ReDSL/Test/ex1.redsl" {
+    §1 {
+        This is a generic requirement without a package definition. But 
+        it is in a file block, so it should be in a package named after the
+        file it came from. It also contains a simple URL in the form of
+        https://gelhausen.com. And here is a reference to §3. And here an
+        [Entry] for the glossary. Sogar eine \} kommt hier vor, sie muss
+        allerdings mit einem \\ escaped werden. Does this work?
+        
+        EXAMPLE: It provides a simple Example.
+    }
+    package "User Requirement Specification"
+    §2 {ReDSL shall be easy to use with a generic text editor.}
+    §3 {ReDSL files shall have a clear syntax and semantics.}
+    package "System Requirement Specification"
+    §4 {ReDSL shall be available on all major platforms.}
+    §4.1 {ReDSL shall be available on MacOS.}
+    §4.2 {ReDSL shall be available on Windows.}
+    §4.3 {ReDSL shall be available on Linux.}
+    §5 {ReDSL shall provide a wellformed Grammar defining the language.}
+}
+file "/home/Tom/ReDSL/Test/ex1'.redsl" {
+    package "Software Requirement Specification - ReDSL Parser"
+    §5.1 {ReDSL shall provide an ANTLR4-Grammar.}
+    package "Module Requirement Specification"
+}
