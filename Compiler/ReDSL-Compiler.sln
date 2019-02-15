@@ -1,7 +1,7 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANTLR-Reader", "ANTLR-Reader\ANTLR-Reader.csproj", "{612005C6-10D7-48A8-8CB5-CCB7A74419B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReDSL-Compiler", "ANTLR-Reader\ReDSL-Compiler.csproj", "{612005C6-10D7-48A8-8CB5-CCB7A74419B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
