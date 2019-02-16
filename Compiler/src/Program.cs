@@ -9,7 +9,7 @@ namespace org.redsl.Compiler
     class MainClass
     {
         static string s = "file \"x\" {  §fgh{blll} package \"aa\" \n\r\n\r §1{ blabla bla bla \n\n blo blo \n blu }\n\r\n\r\t§2{}§3{} package \"b\" package \"c\" §asdf{asfrg jgoirjg}  }";
-        static string ex1 = "/Users/tom/Projects/ReDSL/ANTLR-Reader/testdata/ex1.redsl";
+        static string ex1 = "/Users/tom/git/ReDSL/Compiler/testdata/ex1.redsl";
         public static void Main(string[] args)
         {
             string filename = ex1;
