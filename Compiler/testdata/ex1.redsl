@@ -5,7 +5,7 @@
         file it came from. It also contains a simple URL in the form of
         https://gelhausen.com. And here is a reference to §3. And here an
         [Entry] for the glossary. Sogar eine \} kommt hier vor, sie muss
-        allerdings mit einem \\ escaped werden. Does this work?
+        allerdings mit einem \\ escaped werden. Does this work even with\\in a word???
         
         EXAMPLE: It provides a simple Example.
     }

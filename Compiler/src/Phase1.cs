@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
+using org.redsl.Compiler.TokenTypes;
 
 namespace org.redsl.Compiler
 {
@@ -55,58 +56,13 @@ namespace org.redsl.Compiler
 
         private static void TidyToken(XElement node)
         {
-            Console.Write("Tidying " + node + "...");
-
             string type = node.Attribute("type").Value;
-            string value = node.Attribute("value").Value;
-            Boolean foundToken = false;
-
-
-            if (DiscardTokens.Contains(type))
+            TokenType tt = TokenTypeFacory.GetTokenType(type);
+            if (tt == null)
             {
-                foundToken = true;  // superflous, but make things clear
-                node.Remove();
-                Console.WriteLine(" removed.");
-                return;
+                throw new Exception("Unknown token type '" + type + "'. The parser code and the compiler code seem out of sync.");
             }
-
-            if (KeepAsTheyAreTokens.Contains(type))
-            {
-                foundToken = true;  // superflous, but make things clear
-                Console.WriteLine(" ok.");
-                return;
-            }
-
-            if (TrimQuotesTokens.Contains(type))
-            {
-                foundToken = true;
-                value = Util.TrimQuotes(value);
-                Console.Write(" trimed quotes");
-            }
-
-            if (UnescapeBackslashesTokens.Contains(type))
-            {
-                foundToken = true;
-                value = Util.UnescapeBackslashes(value);
-                Console.Write(" unescaped backslashes");
-            }
-
-            if (UnescapeDollarTokens.Contains(type))
-            {
-                foundToken = true;
-                value = Util.UnescapeBackslashes(value);
-                Console.Write(" unescaped backslashes in math mode");
-            }
-
-            if (foundToken)
-            {
-                node.Attribute("value").Value = value;
-            }
-            else
-            {
-                throw new Exception("unknown token type - the grammar and this code module seem out of sync");
-            }
-            Console.WriteLine(".");
+            tt.TidyToken(node);
         }
     }
 }

@@ -28,8 +28,6 @@ namespace org.redsl.Compiler
             Console.WriteLine(doc.ToString());
             doc = Phase1.TidyTokens(doc);
             Console.WriteLine(doc.ToString());
-
-            Console.WriteLine("Test:" + TokenTypeFacory.GetTokenType("REQ_DEF"));
             // doc = Phase2.TokensToAttributes(doc);
             // Console.WriteLine(doc.ToString());
             // doc = Phase3.ResolvePackages(doc);
