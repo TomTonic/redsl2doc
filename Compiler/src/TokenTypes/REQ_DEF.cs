@@ -9,7 +9,7 @@ namespace org.redsl.Compiler.TokenTypes
 
         public override void TidyToken(XElement node)
         {
-            throw new Exception("todo");
+            // nothing to do
         }
     }
 }

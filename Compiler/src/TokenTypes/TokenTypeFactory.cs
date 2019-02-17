@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace org.redsl.Compiler.TokenTypes
 {
-    public class TokenTypeFacory
+    public static class TokenTypeFacory
     {
         private static readonly Dictionary<string, TokenType> map = new Dictionary<string, TokenType>();
 
@@ -27,7 +27,6 @@ namespace org.redsl.Compiler.TokenTypes
                 { }
 
             }
-            Console.WriteLine(map);
         }
 
         public static TokenType GetTokenType(string name)

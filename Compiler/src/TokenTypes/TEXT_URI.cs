@@ -9,7 +9,10 @@ namespace org.redsl.Compiler.TokenTypes
 
         public override void TidyToken(XElement node)
         {
-            throw new Exception("todo");
+            string value = node.Attribute("value").Value;
+            node.Name = "uri";
+            node.RemoveAttributes();
+            node.SetAttributeValue("value", value);
         }
     }
 }
