@@ -5,13 +5,6 @@ namespace org.redsl.Compiler.TokenTypes
 {
     public class MATH_CONTENT : TokenType
     {
-        private static MATH_CONTENT singleton = new MATH_CONTENT();
-        private MATH_CONTENT()
-        {
-        }
-
-        public static MATH_CONTENT Instance => singleton;
-
         public override string XMLLabel => "math";
 
         public override void TidyToken(XElement node)
