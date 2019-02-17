@@ -3,6 +3,7 @@ using System.Xml.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using org.ReDSL.Parser;
+using org.redsl.Compiler.TokenTypes;
 
 namespace org.redsl.Compiler
 {
@@ -27,12 +28,14 @@ namespace org.redsl.Compiler
             Console.WriteLine(doc.ToString());
             doc = Phase1.TidyTokens(doc);
             Console.WriteLine(doc.ToString());
-            doc = Phase2.TokensToAttributes(doc);
-            Console.WriteLine(doc.ToString());
-            doc = Phase3.ResolvePackages(doc);
-            Console.WriteLine(doc.ToString());
-            doc = Phase3.TidyPackageDeclarations(doc);
-            Console.WriteLine(doc.ToString());
+
+            Console.WriteLine("Test:" + TokenTypeFacory.GetTokenType("REQ_DEF"));
+            // doc = Phase2.TokensToAttributes(doc);
+            // Console.WriteLine(doc.ToString());
+            // doc = Phase3.ResolvePackages(doc);
+            // Console.WriteLine(doc.ToString());
+            // doc = Phase3.TidyPackageDeclarations(doc);
+            // Console.WriteLine(doc.ToString());
         }
     }
 }
