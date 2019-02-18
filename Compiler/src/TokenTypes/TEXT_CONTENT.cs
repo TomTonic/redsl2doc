@@ -10,7 +10,7 @@ namespace org.redsl.Compiler.TokenTypes
         public override void TidyToken(XElement node)
         {
             string value = node.Attribute("value").Value;
-            node.Name = "word";
+            node.Name = "text";
             node.RemoveAttributes();
             node.SetAttributeValue("value", value);
         }

@@ -11,7 +11,7 @@ namespace org.redsl.Compiler.TokenTypes
         {
             string value = node.Attribute("value").Value;
             value = Util.UnescapeBackslashes(value);
-            node.Name = "word";
+            node.Name = "text";
             node.RemoveAttributes();
             node.SetAttributeValue("value", value);
         }
