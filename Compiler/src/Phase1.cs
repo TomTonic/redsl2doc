@@ -14,7 +14,7 @@ namespace org.redsl.Compiler
         {
             Util.CheckGen(doc, "1.0", "0");
             XDocument result = new XDocument(doc);
-            Util.SetGen(result, "1.0", "1");
+            Util.SetGen(result, "1.0", "0.5");
             IEnumerable<XElement> tokenNodes =
                 from AnyElement in result.Descendants()
                 where (
@@ -40,6 +40,104 @@ namespace org.redsl.Compiler
                 throw new Exception("Unknown token type '" + type + "'. The parser code and the compiler code seem out of sync.");
             }
             tt.TidyToken(node);
+        }
+
+        public static XDocument ReduceTextNodes(XDocument doc)
+        {
+            Util.CheckGen(doc, "1.0", "0.5");
+            XDocument result = new XDocument(doc);
+            Util.SetGen(result, "1.0", "1");
+            IEnumerable<XElement> RunningTextNodes =
+                from AnyElement in result.Descendants()
+                where (
+                    (AnyElement.NodeType == XmlNodeType.Element)
+                    && (((XElement)AnyElement).Name.Equals(XName.Get("RunningText")))
+                    )
+                select AnyElement;
+            XElement[] textNodeArray = RunningTextNodes.ToArray(); // cast it to array so we can manipulate (i.e. delete) the elements
+
+            foreach (XElement node in textNodeArray)
+            {
+                ReduceTextNodesInRunningTextNode(node);
+            }
+            return result;
+        }
+
+        private static void ReduceTextNodesInRunningTextNode(XElement node)
+        {
+            TrimWS(node);
+            XElement[] children = node.Descendants().ToArray();
+            if (children.Length <= 1) return;
+
+            XElement current = children[0];
+            int i = 1;
+            do
+            {
+                XElement next = CheckAppendTextValue(current, children[i]);
+                current = next;
+                i++;
+            } while (i < children.Length);
+        }
+
+        private static void TrimWS(XElement node)
+        {
+            XElement[] children = node.Descendants().ToArray();
+            XName ws = XName.Get("ws");
+            int i = 0;
+            while (i < children.Length && children[i].Name.Equals(ws))
+            {
+                children[i].Remove();
+                i++;
+            }
+            if (i < children.Length)
+            {
+                int j = children.Length - 1;
+                while (j > 0 && children[j].Name.Equals(ws))
+                {
+                    children[j].Remove();
+                    j--;
+                }
+            }
+        }
+
+        private static XElement CheckAppendTextValue(XElement current, XElement next)
+        {
+            string typeCurrent = current.Name.ToString();
+            string typeNext = next.Name.ToString();
+            if ("text".Equals(typeCurrent) && "text".Equals(typeNext))
+            {
+                string valueCurrent = current.Attribute("value").Value;
+                string valueNext = next.Attribute("value").Value;
+                current.SetAttributeValue("value", valueCurrent + valueNext);
+                next.Remove();
+                return current;
+            }
+            if ("text".Equals(typeCurrent) && "ws".Equals(typeNext))
+            {
+                string valueCurrent = current.Attribute("value").Value;
+                if (!valueCurrent.Last().Equals(' '))
+                {
+                    current.SetAttributeValue("value", valueCurrent + " ");
+                }
+                next.Remove();
+                return current;
+            }
+            if ("ws".Equals(typeCurrent) && "text".Equals(typeNext))
+            {
+                string valueNext = next.Attribute("value").Value;
+                if (!valueNext.First().Equals(' '))
+                {
+                    next.SetAttributeValue("value", " " + valueNext);
+                }
+                current.Remove();
+                return next;
+            }
+            if ("ws".Equals(typeCurrent) && "ws".Equals(typeNext))
+            {
+                next.Remove();
+                return current;
+            }
+            return next;
         }
     }
 }
