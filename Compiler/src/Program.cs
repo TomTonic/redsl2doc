@@ -30,12 +30,12 @@ namespace org.redsl.Compiler
             Console.WriteLine(doc.ToString());
             doc = Phase1.ReduceTextNodes(doc);
             Console.WriteLine(doc.ToString());
-            // doc = Phase2.TokensToAttributes(doc);
-            // Console.WriteLine(doc.ToString());
-            // doc = Phase3.ResolvePackages(doc);
-            // Console.WriteLine(doc.ToString());
-            // doc = Phase3.TidyPackageDeclarations(doc);
-            // Console.WriteLine(doc.ToString());
+            doc = Phase2.TokensToAttributes(doc);
+            Console.WriteLine(doc.ToString());
+            doc = Phase3.ResolvePackages(doc);
+            Console.WriteLine(doc.ToString());
+            doc = Phase3.TidyPackageDeclarations(doc);
+            Console.WriteLine(doc.ToString());
         }
     }
 }
