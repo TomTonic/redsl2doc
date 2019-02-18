@@ -10,29 +10,6 @@ namespace org.redsl.Compiler
 {
     public static class Phase1
     {
-        private static readonly HashSet<string> DiscardTokens =
-            new HashSet<string>(new string[] { "FILE_KEYWORD", "FILE_BLOCK_START",
-            "FILE_BLOCK_END", "PACKAGE_KEYWORD", "WS", "PARAM_START", "TEXT_START",
-            "REQ_DEF_WS", "TEXT_CLOSE", "TEXT_WS", "TEXT_LINE_BREAK", "TEXT_NEXT_PARA",
-            "TEXT_EXAMPLE_MARKER", "TEXT_RATIO_MARKER", "TEXT_REF_MARKER",
-            "TEXT_START_MATH", "PARAM_CLOSE", "PARAM_EQUALS", "PARAM_ID_LIST_START",
-            "PARAM_ID_LIST_SEP", "PARAM_ID_LIST_END", "PARAM_WS", "MATH_CLOSE"  });
-
-        private static readonly HashSet<string> TrimQuotesTokens =
-            new HashSet<string>(new string[] { "ID_STR", "ID_STR_ESC_SEQ",
-            "TEXT_ESC_SEQ", "MATH_ESC_SEQ" });
-
-        private static readonly HashSet<string> UnescapeBackslashesTokens =
-            new HashSet<string>(new string[] { "ID_STR_ESC_SEQ", "TEXT_ESC_SEQ" });
-
-        private static readonly HashSet<string> UnescapeDollarTokens =
-            new HashSet<string>(new string[] { "MATH_ESC_SEQ" });
-
-        private static readonly HashSet<string> KeepAsTheyAreTokens =
-            new HashSet<string>(new string[] { "REQ_DEF", "TEXT_COMMENT",
-            "TEXT_RE_ID_REF", "TEXT_URI", "TEXT_TERM_REF", "TEXT_CONTENT",
-            "PARAM_ID", "PARAM_STRING", "PARAM_BOOL", "PARAM_NUMBER", "MATH_CONTENT" });
-
         public static XDocument TidyTokens(XDocument doc)
         {
             Util.CheckGen(doc, "1.0", "0");
