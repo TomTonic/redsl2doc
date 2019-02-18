@@ -10,7 +10,7 @@ fragment URI:
 fragment URIScheme: URIString; // append more schemes here...
 fragment URILogin: URIString ':' URIString '@';
 fragment URIPort: [0-9]+;
-fragment URIHost: '/'? URIStringNoDot ('.' URIStringNoDot)*;
+fragment URIHost: '/'? URIString ('.' URIString)*;
 fragment URIPath: URIString ('.' URIString)*;
 fragment URIQuery: '?' URISearch ('&' URISearch)*;
 fragment URISearch:
