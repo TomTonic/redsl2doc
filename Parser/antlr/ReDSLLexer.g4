@@ -25,9 +25,10 @@ mode TEXT_MODE;
 
 TEXT_CLOSE: '}' -> mode(DEFAULT_MODE); // would need 2 x popMode
 TEXT_COMMENT: '#' ~[\r\n\f]*;
-TEXT_WS: Hws -> skip;
+TEXT_WS:
+	Hws+; // we need the WS tokens to correctly reasseble the text
 TEXT_LINE_BREAK:
-	Linebreak -> skip; // only matches a single vertical white space as TEXT_NEXT_PARA is greedy
+	Linebreak; // only matches a single vertical white space as TEXT_NEXT_PARA is greedy
 TEXT_NEXT_PARA: Linebreak (Hws* Linebreak)+ Hws*;
 // greedy - matches every time when there are multiple succesive line breaks
 TEXT_EXAMPLE_MARKER:

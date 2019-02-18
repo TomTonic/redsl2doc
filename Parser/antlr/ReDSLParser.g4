@@ -45,6 +45,8 @@ runningText:
 		| TEXT_TERM_REF
 		| TEXT_COMMENT
 		| TEXT_URI
+		| TEXT_WS
+		| TEXT_LINE_BREAK
 		| mathModeExpression
 	)+;
 

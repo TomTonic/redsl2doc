@@ -19,11 +19,11 @@ fragment URIFrag: '#' URIString;
 fragment URIString: ([a-zA-Z~0-9] | URIHex) (
 		[a-zA-Z0-9.-]
 		| URIHex
-	)*;
+	)+;
 fragment URIStringNoDot: ([a-zA-Z~0-9] | URIHex) (
 		[a-zA-Z0-9-]
 		| URIHex
-	)*;
+	)+;
 fragment URIHex: ('%' [a-fA-F0-9] [a-fA-F0-9])+;
 
 // ----------------------------------- Unicode
