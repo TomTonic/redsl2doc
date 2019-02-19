@@ -19,6 +19,9 @@ REQ_DEF: ('§_' | ReID) -> pushMode(REQ_DEF_MODE);
 DOCUMENT_KEYWORD: 'document';
 
 VERSION_INFO_KEYWORD: 'version-info';
+GLOSSARY_KEYWORD: 'glossary';
+LOCAL_KEYWORD: 'local';
+GLOBAL_KEYWORD: 'global';
 
 mode REQ_DEF_MODE;
 
