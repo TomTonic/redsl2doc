@@ -29,6 +29,7 @@ file "/home/Tom/ReDSL/Test/ex1'.redsl" {
         package "System Requirement Specification"
         package "General Requirements"
         version-info
+        glossary local
     }
     document "Detailed Requirements for Project X" {
         package "Software Requirement Specification - ReDSL Parser" {
@@ -37,6 +38,7 @@ file "/home/Tom/ReDSL/Test/ex1'.redsl" {
         }
         package "Module Requirement Specification"
         version-info
+        glossary global
     }
 }
 file "/home/Tom/ReDSL/Test/ex1''.redsl" {
