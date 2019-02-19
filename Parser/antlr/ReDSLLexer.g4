@@ -3,19 +3,19 @@ lexer grammar ReDSLLexer;
 import Fragments;
 
 FILE_KEYWORD: 'file';
-FILE_BLOCK_START: '{';
-FILE_BLOCK_END: '}';
+BLOCK_START: '{';
+BLOCK_END: '}';
 
 PACKAGE_KEYWORD: 'package';
 
-ID_STR: '"' ((~["\\\r\n\f]) | (ID_STR_ESC_SEQ))* '"';
-ID_STR_ESC_SEQ: ('\\\\' | '\\"' | ('\\' .)) | UnicodeCP;
+ID_STR: IdStr;
+//ID_STR: '"' ((~["\\\r\n\f]) | (ID_STR_ESC_SEQ))* '"'; ID_STR_ESC_SEQ: ('\\\\' | '\\"' | ('\\' .))
+// | UnicodeCP;
 
 WS: [ \t\r\n\f] -> skip;
 
 REQ_DEF: ('§_' | ReID) -> pushMode(REQ_DEF_MODE);
 
-//DOCUMENT_KEYWORD: 'document' -> pushMode(DOC_DEF_MODE);
 DOCUMENT_KEYWORD: 'document';
 
 VERSION_INFO_KEYWORD: 'version-info';
@@ -73,10 +73,3 @@ mode MATH_MODE;
 MATH_CLOSE: '$' -> popMode;
 MATH_ESC_SEQ: '\\' [\\$];
 MATH_CONTENT: ~[\\$]+;
-
-// mode DOC_DEF_MODE;
-
-// DOC_VERSION_INFO_KEYWORD: 'version-info'; DOC_PACKAGE_KEYWORD: 'package'; DOC_FILE_KEYWORD:
-// 'file';
-
-// DOC_ID_STR: IdStr; DOC_START_BLOCK: '{'; DOC_END_BLOCK: '}'; DOC_WS: [ \t\r\n\f] -> skip;

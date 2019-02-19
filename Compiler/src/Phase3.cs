@@ -47,7 +47,7 @@ namespace org.redsl.Compiler
         private static XElement getParentFileBlock(XElement node)
         {
             if (node == null) return null;
-            if (node.Name.Equals(XName.Get("FileBlock")))
+            if (node.Name.Equals(XName.Get("FileDecl")))
             {
                 return node;
             }
