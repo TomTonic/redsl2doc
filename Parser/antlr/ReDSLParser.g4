@@ -4,33 +4,28 @@ options {
 	tokenVocab = ReDSLLexer;
 }
 
-parse: ( fileBlock+ | (packageDecl | requirementDecl)+)?;
+parse: ( fileDecl+ | (packageDecl | requirementDecl)+)?;
 
-fileBlock:
-	FILE_KEYWORD ID_STR FILE_BLOCK_START (
+fileDecl:
+	FILE_KEYWORD ID_STR BLOCK_START (
 		packageDecl
 		| requirementDecl
 		| documentDecl
-	)* FILE_BLOCK_END;
+	)* BLOCK_END;
 
 packageDecl: PACKAGE_KEYWORD ID_STR;
 
-requirementDecl: REQ_DEF parameterBlock? textBlock;
-
-textBlock:
-	TEXT_START (textBlockContentFirst textBlockContentNext*)? TEXT_NEXT_PARA?
-	// simple linebreaks will be skipped by the lexer but if there are multiple linebreaks at the end of a text block, the lexer will (by design) omit a TEXT_NEXT_PARA token here
-	TEXT_CLOSE;
-
-textBlockContentFirst: TEXT_NEXT_PARA? runningText;
-
-textBlockContentNext:
-	(
-		exampleDecl
-		| rationaleDecl
-		| referenceDecl
-		| (TEXT_NEXT_PARA runningText)
-	);
+requirementDecl:
+	REQ_DEF parameterBlock? TEXT_START TEXT_NEXT_PARA? (
+		runningText (
+			(
+				exampleDecl
+				| rationaleDecl
+				| referenceDecl
+				| (TEXT_NEXT_PARA runningText)
+			)*
+		)
+	)? TEXT_NEXT_PARA? TEXT_CLOSE;
 
 exampleDecl: TEXT_EXAMPLE_MARKER runningText;
 
@@ -82,15 +77,13 @@ mathModeExpression:
 	TEXT_START_MATH (MATH_ESC_SEQ | MATH_CONTENT)* MATH_CLOSE;
 
 documentDecl:
-	DOCUMENT_KEYWORD ID_STR FILE_BLOCK_START (
+	DOCUMENT_KEYWORD ID_STR BLOCK_START (
 		packageRef
 		| VERSION_INFO_KEYWORD
 		| (GLOSSARY_KEYWORD (LOCAL_KEYWORD | GLOBAL_KEYWORD)?)
-	)* FILE_BLOCK_END;
+	)* BLOCK_END;
 
 packageRef:
-	PACKAGE_KEYWORD ID_STR (
-		FILE_BLOCK_START fileRef* FILE_BLOCK_END
-	)?;
+	PACKAGE_KEYWORD ID_STR (BLOCK_START fileRef* BLOCK_END)?;
 
 fileRef: FILE_KEYWORD ID_STR;
