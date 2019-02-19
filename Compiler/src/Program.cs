@@ -26,15 +26,17 @@ namespace org.redsl.Compiler
             XDocument doc = listener.GetXDocument();
             Console.WriteLine();
             Console.WriteLine(doc.ToString());
-            doc = Phase1.TidyTokens(doc);
+            doc = Phase1.TidyTokens(doc); // this will delete superflouos tokens and prepare text tokens for assembly
             Console.WriteLine(doc.ToString());
-            doc = Phase1.ReduceTextNodes(doc);
+            doc = Phase1.ReduceTextNodes(doc); // this will assemble consecutive text and white space tokens for easier text handling afterwards
             Console.WriteLine(doc.ToString());
-            doc = Phase2.TokensToAttributes(doc);
+            doc = Phase2.TokensToAttributes(doc); // this will move other tokens as attributes to their parents
             Console.WriteLine(doc.ToString());
-            doc = Phase3.ResolvePackages(doc);
+            doc = Phase3.PropagateFileAttributes(doc);
             Console.WriteLine(doc.ToString());
-            doc = Phase3.TidyPackageDeclarations(doc);
+            doc = Phase3.ResolvePackages(doc); // this will assign the package attribute to every requirement declaration
+            Console.WriteLine(doc.ToString());
+            doc = Phase3.TidyPackageDeclarations(doc); // this will reorganize all package declarations and move their requirements nodes there
             Console.WriteLine(doc.ToString());
         }
     }
