@@ -10,6 +10,7 @@ fileBlock:
 	FILE_KEYWORD ID_STR FILE_BLOCK_START (
 		packageDecl
 		| requirementDecl
+		| documentDecl
 	)* FILE_BLOCK_END;
 
 packageDecl: PACKAGE_KEYWORD ID_STR;
@@ -79,3 +80,23 @@ idListParamDecl:
 
 mathModeExpression:
 	TEXT_START_MATH (MATH_ESC_SEQ | MATH_CONTENT)* MATH_CLOSE;
+
+// documentDecl: DOCUMENT_KEYWORD DOC_ID_STR DOC_START_BLOCK ( docPackageRef |
+// DOC_VERSION_INFO_KEYWORD )* DOC_END_BLOCK;
+
+// docPackageRef: DOC_PACKAGE_KEYWORD DOC_ID_STR ( DOC_START_BLOCK docFileRef* DOC_END_BLOCK )?;
+
+// docFileRef: DOC_FILE_KEYWORD DOC_ID_STR;
+
+documentDecl:
+	DOCUMENT_KEYWORD ID_STR FILE_BLOCK_START (
+		docPackageRef
+		| VERSION_INFO_KEYWORD
+	)* FILE_BLOCK_END;
+
+docPackageRef:
+	PACKAGE_KEYWORD ID_STR (
+		FILE_BLOCK_START docFileRef* FILE_BLOCK_END
+	)?;
+
+docFileRef: FILE_KEYWORD ID_STR;
