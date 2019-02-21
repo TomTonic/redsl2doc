@@ -85,7 +85,7 @@ namespace org.redsl.Compiler
             DocumentNumber++;
             string myDocumentNumber = GetDocumentNumberString();
             string documentTitle = myDocumentNumber + "\t" + docDecl.Attribute("ID_STR").Value;
-            string fullfilename = basefilename + "." + documentTitle + ".docx";
+            string fullfilename = BuildFileName(basefilename, documentTitle);
             PackageNumber = 0;
 
             using (WordprocessingDocument myDocument =
@@ -117,6 +117,18 @@ namespace org.redsl.Compiler
 
                 MarkAsVisited(docDecl);
             }
+        }
+
+        private string BuildFileName(string basefilename, string documentTitle)
+        {
+            if (!Directory.Exists(basefilename))
+            {
+                throw new Exception("The output parameter must be the name of an existing directory");
+            }
+            //if (!basefilename.EndsWith(Path.PathSeparator)) basefilename += Path.PathSeparator;
+            string result = basefilename + documentTitle + ".docx";
+            result.Replace('\t', ' ');
+            return result;
         }
 
         private void AddStyles(WordprocessingDocument doc)
