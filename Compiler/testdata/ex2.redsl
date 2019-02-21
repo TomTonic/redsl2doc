@@ -6,24 +6,37 @@ file "/home/Tom/ReDSL/Test/ex1.redsl" {
         https://gelhausen.com. And here is a reference to §3. And here an
         [Entry] for the glossary. Sogar eine \} kommt hier vor, sie muss
         allerdings mit einem \\ escaped werden. Does this work even with\\in a word???
+
+        This is an extra paragraph. It does not contain a lot of text.
         
         EXAMPLE: It provides a simple Example.
+
+        This is an extra paragraph after the example.
     }
+
     package "User Requirement Specification"
+
     §2 {ReDSL shall be easy to use with a generic text editor.}
     §3 {ReDSL files shall have a clear syntax and semantics.}
+
     package "System Requirement Specification"
     §4 {ReDSL shall be available on all major platforms.}
     §4.1 {ReDSL shall be available on MacOS.}
     §4.2 {ReDSL shall be available on Windows.}
     §4.3 {ReDSL shall be available on Linux.}
     §5 {ReDSL shall provide a wellformed Grammar defining the language.}
+
     package "Software Requirement Specification - ReDSL Parser"
+
     §5.2 {The generated parser shall not depend on platform specific code.}
-    package "Module Requirement Specification"}
+    package "Module Requirement Specification"
+}
 file "/home/Tom/ReDSL/Test/ex1'.redsl" {
+
     package "Software Requirement Specification - ReDSL Parser"
+
     §5.1 {ReDSL shall provide an ANTLR4-Grammar.}
+
     document "Requirements for Project X" {
         package "User Requirement Specification" 
         package "System Requirement Specification"
@@ -31,7 +44,8 @@ file "/home/Tom/ReDSL/Test/ex1'.redsl" {
         version-info
         glossary local
     }
-    document "Detailed Requirements for Project X" {
+
+    document "Detailed Requirements Specification for Project X" {
         package "Software Requirement Specification - ReDSL Parser" {
             file "ReDSL/Test/ex1'.redsl"
             file "ReDSL/Test/ex1.redsl"

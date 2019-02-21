@@ -38,7 +38,7 @@ namespace org.redsl.Compiler
             Console.WriteLine(doc.ToString());
             doc = Phase3.TidyPackageDeclarations(doc); // this will reorganize all package declarations and move their requirements nodes there
             Console.WriteLine(doc.ToString());
-            DocGen.GenerateDocuments(doc, ex1);
+            (new DocGen()).GenerateDocuments(doc, ex1);
         }
     }
 }
