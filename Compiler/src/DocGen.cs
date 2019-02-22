@@ -127,7 +127,6 @@ namespace org.redsl.Compiler
             }
             //if (!basefilename.EndsWith(Path.PathSeparator)) basefilename += Path.PathSeparator;
             string result = basefilename + documentTitle + ".docx";
-            result.Replace('\t', ' ');
             return result;
         }
 
@@ -145,7 +144,7 @@ namespace org.redsl.Compiler
             CreateAndAddParagraphStyle(styleDefPart, "DocumentTitle", "Document Title", new FontSize() { Val = "64" }, new Bold());
             CreateAndAddParagraphStyle(styleDefPart, "PackageTitle", "Package Title", new FontSize() { Val = "32" }, new Bold());
             CreateAndAddParagraphStyle(styleDefPart, "NoContent", "No-Content Paragraphs", new Italic());
-            CreateAndAddParagraphStyle(styleDefPart, "RecDecl", "Requirement", new Indentation() { FirstLine = "0", Hanging = "300" });
+            CreateAndAddParagraphStyle(styleDefPart, "RecDecl", "Requirement");
         }
 
         private void MarkAsVisited(XElement node)
@@ -159,7 +158,7 @@ namespace org.redsl.Compiler
             RelativeReqNumber = 0;
             string myPackageNumber = GetPackageNumberString();
             string packageName = packageRef.Attribute("ID_STR").Value;
-            Paragraph title = appendParagraph(body, myPackageNumber + " " + packageName);
+            Paragraph title = appendParagraph(body, myPackageNumber + "\t" + packageName);
             setStype(title, "PackageTitle");
 
 
@@ -256,6 +255,9 @@ namespace org.redsl.Compiler
 
             // Get a reference to the ParagraphProperties object.
             ParagraphProperties pPr = p.ParagraphProperties;
+
+            pPr.Justification = new Justification() { Val = JustificationValues.Both };
+            pPr.Indentation = new Indentation() { FirstLine = "0", Hanging = "750" };
 
             // If a ParagraphStyleId object does not exist, create one.
             if (pPr.ParagraphStyleId == null)
