@@ -1,0 +1,62 @@
+file "dummy" {
+package "Project Mission"
+
+§1 {Provide a solution to automatically offsite-backup your local NAS backup.}
+
+package "Use Cases"
+
+§u1 {As a user, I want to simply backup my Mac to my local NAS with Time Machine, not more.}
+§u2 {As a user, I want an offsite backup of my Time Machine backup for desaster recovery (fire, water, theft, etc.).}
+§u3 {As a user, I want to use a second NAS at my dad's place as second tier backup location OR I want to use a virtual server in a data center as second tier backup location.}
+§u4 {As a user, I want a simple recovery of my data from the offsite backup in case I need it (because I probably care for other things in that situation as well...).}
+§u5 {As a user, I want to regularely backup all my photos and family videos (>1 TB, >150.000 files) to the remote location.}
+§u6 {As a user, I don't want my notebook to handle all this remote-backup stuff. I want my NAS to do all the work in the background.}
+§u7 {As an administrator, I want the backup to run automatically.}
+§u8 {As an administrator, I want automatic security updates for all involved systems.}
+§u9 {As relative, I want easy access to the backuped data in case of a fatal desaster.}
+
+package "Solution Design Requirements (in the order of their priority)"
+
+§dr1 {Automatic}
+§dr2 {Safe and Robust}
+§dr3 {Performant and ressource aware}
+§dr4 {Platform independent}
+
+package "Design Decisions"
+
+§dd1 {Interrupted transmissions shall not render the second tier backup inconsistent (Reading the system state shall be atomic)}
+§dd2 {Changes on the first tier during backup to the second tier shall not render the backup on the second tier inconsistent (Writing the system state shall be atomic)}
+§dd2 {Only deltas shall be transfered over WAN}
+§dd2 {The solution shall be standards-based to the greatest possible extend.}
+§dd2 {No need to patch the components}
+
+package "Runtime Enviroment Requirements (Assumptions/System Requirements/Restrictions)"
+
+§rr1 {Solution can execute code on local NAS and remote storage (e.g. two Synology Diskstations with ssh-access)}
+§rr2 {Local and remote storage can run rsync}
+§rr3 {Local NAS provides file system based snapshot functionality (e.g. btrfs)}
+§rr4 {Remote storage support hard-links}
+§rr5 {The onsite backup can simply be replicated, no need to select/filter files or to provide version management. (This shall be provided by the first tier backup solution, e.g. Time Machine, if needed.)}
+§rr6 {The backup process shall work starting from an effectiv 2 MBit WAN uplink connection.}
+
+package "System Design"
+
+§sd1 {bash script with standard tools (Linux-environment)}
+§sd2 {simple and standard file structure of the second tier backup}
+§sd3 {Automatic detection of activity in a target backup folder (e.g. is Time Machine currently running?)}
+§sd4 {Local snapshot via btrfs before transmission (any alternatives?)}
+§sd5 {rsync --link-dest for data transmission}
+§sd6 {remove second tier backups after succesful transmission}
+§sd7 {remove local snapshot}
+
+document "Offsite Backup" {
+    package "Project Mission" 
+    package "Use Cases"
+    package "Solution Design Requirements (in the order of their priority)"
+    package "Design Decisions"
+    package "Runtime Enviroment Requirements (Assumptions/System Requirements/Restrictions)"
+    package "System Design"
+    version-info
+    glossary local
+}
+}
