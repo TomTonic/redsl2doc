@@ -3,7 +3,7 @@
 
 lexer grammar Fragments;
 
-// ----------------------------------- URI parsing based on
+// URI parsing based on work by Tom Everett, Copyright (c) 2016. See
 // https://github.com/antlr/grammars-v4/blob/master/url/url.g4 (BSD-License)
 
 fragment URI:
