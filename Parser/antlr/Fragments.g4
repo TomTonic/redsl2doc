@@ -1,3 +1,6 @@
+// Copyright 2019 by Tom Gelhausen. License: GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007. See
+// https://opensource.org/licenses/GPL-3.0
+
 lexer grammar Fragments;
 
 // ----------------------------------- URI parsing based on
