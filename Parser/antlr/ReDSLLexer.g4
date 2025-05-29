@@ -29,6 +29,7 @@ mode REQ_DEF_MODE;
 
 PARAM_START: '[' -> pushMode(PARAM_MODE);
 TEXT_START: '{' -> pushMode(TEXT_MODE);
+DEDUCT_START: '=>' | '\u21D2';
 REQ_DEF_WS: [ \t\r\n\f] -> skip;
 
 mode TEXT_MODE;
@@ -39,7 +40,7 @@ TEXT_WS:
 	Hws+; // we need the WS tokens to correctly reasseble the text
 TEXT_LINE_BREAK:
 	Linebreak; // only matches a single vertical white space as TEXT_NEXT_PARA is greedy
-TEXT_NEXT_PARA: Linebreak (Hws* Linebreak)+ Hws*;
+TEXT_NEXT_PARA: NextPara;
 // greedy - matches every time when there are multiple succesive line breaks
 TEXT_EXAMPLE_MARKER:
 	Linebreak (Hws* Linebreak)+ Hws* 'EXAMPLE' Hws* ':'; // greedy!
@@ -69,6 +70,20 @@ PARAM_BOOL: 'true' | 'false';
 PARAM_NUMBER: '-'? [0-9]+;
 //PARAM_SEP           : ';' ;
 PARAM_WS: [ \t\r\n] -> skip;
+
+mode DEDUCT_MODE;
+
+DEDUCT_CLOSE: ';';
+DEDUCT_COMMENT: '#' ~[\r\n\f]*;
+DEDUCT_RE_ID_REF: ReID;
+DEDUCT_AND: '&' | '\u2227';
+DEDUCT_OR: '|' | '\u2228';
+DEDUCT_NOT: '!' | '\u00AC';
+DEDUCT_TRUE: 'true' | '\u22A4';
+DEDUCT_FALSE: 'false' | '\u22A5';
+DEDUCT_LPAREN: '(';
+DEDUCT_RPAREN: ')';
+DEDUCT_WS: [ \t\r\n] -> skip;
 
 mode MATH_MODE;
 

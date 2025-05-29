@@ -12,6 +12,7 @@ fileDecl:
 	FILE_KEYWORD ID_STR BLOCK_START (
 		packageDecl
 		| requirementDecl
+		| requirementDeduction
 		| documentDecl
 	)* BLOCK_END;
 
@@ -28,6 +29,23 @@ requirementDecl:
 			)*
 		)
 	)? TEXT_NEXT_PARA? TEXT_CLOSE;
+
+requirementDeduction:
+	REQ_DEF DEDUCT_START logicalExpression DEDUCT_CLOSE;
+
+logicalExpression:
+	logicalAtom
+	| logicalUnaryExpression
+	| logicalBinaryExpression;
+
+logicalAtom: DEDUCT_RE_ID_REF | DEDUCT_TRUE | DEDUCT_FALSE;
+
+logicalUnaryExpression:
+	(DEDUCT_NOT logicalExpression)
+	| (DEDUCT_LPAREN logicalExpression DEDUCT_RPAREN);
+
+logicalBinaryExpression:
+	DEDUCT_RE_ID_REF (DEDUCT_AND | DEDUCT_OR) logicalExpression;
 
 exampleDecl: TEXT_EXAMPLE_MARKER runningText;
 

@@ -48,6 +48,7 @@ fragment ReID: '§' LetterOrNumber ([._]* LetterOrNumber)*;
 
 fragment Linebreak: '\r'? [\n\f];
 fragment Hws: [ \t];
+fragment NextPara: Linebreak (Hws* Linebreak)+ Hws*;
 
 fragment IdStr: '"' ((~["\\\r\n\f]) | (IdStrEsc))* '"';
 fragment IdStrEsc: ('\\\\' | '\\"' | ('\\' .)) | UnicodeCP;
