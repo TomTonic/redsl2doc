@@ -3,5 +3,4 @@ bin
 Compiler/bin
 Compiler/obj
 Compiler/src/gen
-Compiler/src/TokenTypes
 Parser/antlr/.antlr/*
