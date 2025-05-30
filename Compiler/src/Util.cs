@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 namespace org.redsl.Compiler
 {
-    public static class Util
+    public static partial class Util
     {
         public static void CheckGen(XDocument doc, string version, string gen)
         {
@@ -31,11 +31,11 @@ namespace org.redsl.Compiler
         public static string TrimQuotes(string s)
         {
             string result = s;
-            if (result.Length > 1 && result.StartsWith("\"", StringComparison.Ordinal))
+            if (result.Length > 1 && result.StartsWith('"'))
             {
                 result = result.Substring(1);
             }
-            if (result.Length > 1 && result.EndsWith("\"", StringComparison.Ordinal))
+            if (result.Length > 1 && result.EndsWith('"'))
             {
                 result = result.Substring(0, result.Length - 1);
             }
@@ -44,12 +44,16 @@ namespace org.redsl.Compiler
 
         public static string UnescapeBackslashes(string s)
         {
-            string result = Regex.Replace(s, @"\\.", delegate (Match match)
+            string result = EscapedBackslash().Replace(s, delegate (Match match)
             {
                 string v = match.ToString();
                 return v[1].ToString();
             });
             return result;
         }
+
+        [GeneratedRegex(@"\\.")]
+        private static partial Regex EscapedBackslash();
+
     }
 }
