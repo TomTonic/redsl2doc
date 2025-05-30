@@ -12,12 +12,12 @@ namespace org.redsl.Compiler
             string verval = root.Attribute("version").Value;
             if (!verval.Equals(version))
             {
-                throw new Exception("XML Document not marked as version " + version + ".");
+                throw new Exception("The (internal) XML Document is marked as version '" + verval + "', the compilation process expects version " + version + " at this point.");
             }
             string genval = root.Attribute("gen").Value;
             if (!genval.Equals(gen))
             {
-                throw new Exception("XML Document not marked as gen " + gen + ".");
+                throw new Exception("The (internal) XML Document is marked as gen '" + genval + "', the compilation process expects version " + gen + " at this point.");
             }
         }
 
