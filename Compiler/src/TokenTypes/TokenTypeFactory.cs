@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace org.redsl.Compiler.TokenTypes
 {
-    public static class TokenTypeFacory
+    public static class TokenTypeFactory
     {
         private static readonly Dictionary<string, TokenType> map = new Dictionary<string, TokenType>();
 
-        static TokenTypeFacory()
+        static TokenTypeFactory()
         {
             var subclasses =
                 from assembly in AppDomain.CurrentDomain.GetAssemblies()

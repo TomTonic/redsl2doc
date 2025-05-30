@@ -34,7 +34,7 @@ namespace org.redsl.Compiler
         private static void TidyToken(XElement node)
         {
             string type = node.Attribute("type").Value;
-            TokenType tt = TokenTypeFacory.GetTokenType(type);
+            TokenType tt = TokenTypeFactory.GetTokenType(type);
             if (tt == null)
             {
                 throw new Exception("Unknown token type '" + type + "'. The parser code and the compiler code seem out of sync.");
