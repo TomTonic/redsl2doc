@@ -29,12 +29,12 @@ namespace org.redsl.Compiler
                 {
                     ICharStream stream = CharStreams.fromPath(opts.Input);
                     //ReDSLLexer lexer = new ReDSLLexer(new AntlrInputStream(s));
-                    ReDSLLexer lexer = new ReDSLLexer(stream);
-                    CommonTokenStream tokens = new CommonTokenStream(lexer);
-                    ReDSLParser parser = new ReDSLParser(tokens);
+                    ReDSLLexer lexer = new(stream);
+                    CommonTokenStream tokens = new(lexer);
+                    ReDSLParser parser = new(tokens);
                     ReDSLParser.ParseContext context = parser.parse();
-                    ParseTreeWalker walker = new ParseTreeWalker();
-                    XMLBuildingListener listener = new XMLBuildingListener();
+                    ParseTreeWalker walker = new();
+                    XMLBuildingListener listener = new();
                     walker.Walk(listener, context);
                     XDocument doc = listener.GetXDocument();
                     if (opts.Verbose) Console.WriteLine();

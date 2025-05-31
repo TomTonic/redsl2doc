@@ -10,7 +10,7 @@ namespace org.redsl.Compiler
         public static XDocument TokensToAttributes(XDocument doc)
         {
             Util.CheckGen(doc, "1.0", "1");
-            XDocument result = new XDocument(doc);
+            XDocument result = new(doc);
             Util.SetGen(result, "1.0", "2");
             var tokenNodes =
                 from AnyElement in result.Descendants()
@@ -19,7 +19,7 @@ namespace org.redsl.Compiler
                     && (((XElement)AnyElement).Name.Equals(XName.Get("token")))
                     )
                 select AnyElement;
-            XElement[] tokenNodeArray = tokenNodes.ToArray(); // cast it to array so we can manipulate (i.e. delete) the elements
+            XElement[] tokenNodeArray = [.. tokenNodes]; // cast it to array so we can manipulate (i.e. delete) the elements
 
             foreach (XElement node in tokenNodeArray)
             {
