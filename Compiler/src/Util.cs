@@ -33,11 +33,11 @@ namespace org.redsl.Compiler
             string result = s;
             if (result.Length > 1 && result.StartsWith('"'))
             {
-                result = result.Substring(1);
+                result = result[1..];
             }
             if (result.Length > 1 && result.EndsWith('"'))
             {
-                result = result.Substring(0, result.Length - 1);
+                result = result[..^1];
             }
             return result;
         }

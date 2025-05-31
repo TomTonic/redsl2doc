@@ -28,11 +28,11 @@ namespace org.redsl.Compiler
         public override void EnterEveryRule([NotNull] ParserRuleContext context)
         {
             Type t = context.GetType(); // antlr calls this method with instances of different classes that carry the name of the rule that has been applied
-            string name = t.Name.Substring(0, t.Name.Length - 7); // cut off suffix "Context"
+            string name = t.Name[..^7]; // cut off suffix "Context"
             if (stack.Count == 0)
             {
                 // this must be the root node
-                XElement root = new XElement("ReDSL");
+                XElement root = new("ReDSL");
                 root.SetAttributeValue(name: "version", value: "1.0");
                 root.SetAttributeValue(name: "gen", value: "0");
                 doc.Add(root);
@@ -41,7 +41,7 @@ namespace org.redsl.Compiler
             else
             {
                 XElement parent = stack.Peek();
-                XElement child = new XElement(name);
+                XElement child = new(name);
                 parent.Add(child);
                 stack.Push(child);
             }
@@ -61,7 +61,7 @@ namespace org.redsl.Compiler
         {
             IToken symbol = node.Symbol;
             XElement parent = stack.Peek();
-            XElement child = new XElement("token");
+            XElement child = new("token");
             child.SetAttributeValue("type", ReDSLParser.DefaultVocabulary.GetSymbolicName(symbol.Type));
             child.SetAttributeValue("value", node.GetText());
             parent.Add(child);
@@ -70,7 +70,7 @@ namespace org.redsl.Compiler
         private void AddComment(string value)
         {
             XElement parent = stack.Peek();
-            XComment child = new XComment(value);
+            XComment child = new(value);
             parent.Add(child);
         }
 

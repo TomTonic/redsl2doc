@@ -13,7 +13,7 @@ namespace org.redsl.Compiler
         public static XDocument TidyTokens(XDocument doc)
         {
             Util.CheckGen(doc, "1.0", "0");
-            XDocument result = new XDocument(doc);
+            XDocument result = new(doc);
             Util.SetGen(result, "1.0", "0.5");
             IEnumerable<XElement> tokenNodes =
                 from AnyElement in result.Descendants()
@@ -22,7 +22,7 @@ namespace org.redsl.Compiler
                     && (((XElement)AnyElement).Name.Equals(XName.Get("token")))
                     )
                 select AnyElement;
-            XElement[] tokenNodeArray = tokenNodes.ToArray(); // cast it to array so we can manipulate (i.e. delete) the elements
+            XElement[] tokenNodeArray = [.. tokenNodes]; // cast it to array so we can manipulate (i.e. delete) the elements
 
             foreach (XElement node in tokenNodeArray)
             {
@@ -34,18 +34,14 @@ namespace org.redsl.Compiler
         private static void TidyToken(XElement node)
         {
             string type = node.Attribute("type").Value;
-            TokenType tt = TokenTypeFactory.GetTokenType(type);
-            if (tt == null)
-            {
-                throw new Exception("Unknown token type '" + type + "'. The parser code and the compiler code seem out of sync.");
-            }
+            TokenType tt = TokenTypeFactory.GetTokenType(type) ?? throw new Exception("Unknown token type '" + type + "'. The parser code and the compiler code seem out of sync.");
             tt.TidyToken(node);
         }
 
         public static XDocument ReduceTextNodes(XDocument doc)
         {
             Util.CheckGen(doc, "1.0", "0.5");
-            XDocument result = new XDocument(doc);
+            XDocument result = new(doc);
             Util.SetGen(result, "1.0", "1");
             IEnumerable<XElement> RunningTextNodes =
                 from AnyElement in result.Descendants()
@@ -54,7 +50,7 @@ namespace org.redsl.Compiler
                     && (((XElement)AnyElement).Name.Equals(XName.Get("RunningText")))
                     )
                 select AnyElement;
-            XElement[] textNodeArray = RunningTextNodes.ToArray(); // cast it to array so we can manipulate (i.e. delete) the elements
+            XElement[] textNodeArray = [.. RunningTextNodes]; // cast it to array so we can manipulate (i.e. delete) the elements
 
             foreach (XElement node in textNodeArray)
             {
@@ -66,7 +62,7 @@ namespace org.redsl.Compiler
         private static void ReduceTextNodesInRunningTextNode(XElement node)
         {
             TrimWS(node);
-            XElement[] children = node.Descendants().ToArray();
+            XElement[] children = [.. node.Descendants()];
             if (children.Length <= 1) return;
 
             XElement current = children[0];
@@ -81,7 +77,7 @@ namespace org.redsl.Compiler
 
         private static void TrimWS(XElement node)
         {
-            XElement[] children = node.Descendants().ToArray();
+            XElement[] children = [.. node.Descendants()];
             XName ws = XName.Get("ws");
             int i = 0;
             while (i < children.Length && children[i].Name.Equals(ws))

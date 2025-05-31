@@ -13,7 +13,7 @@ namespace org.redsl.Compiler
         public static XDocument PropagateFileAttributes(XDocument doc)
         {
             Util.CheckGen(doc, "1.0", "2");
-            XDocument result = new XDocument(doc);
+            XDocument result = new(doc);
             Util.SetGen(result, "1.0", "2.1");
             IEnumerable<XElement> reqdeclNodes =
                 from AnyElement in result.Descendants()
@@ -57,7 +57,7 @@ namespace org.redsl.Compiler
         public static XDocument ResolvePackages(XDocument doc)
         {
             Util.CheckGen(doc, "1.0", "2.1");
-            XDocument result = new XDocument(doc);
+            XDocument result = new(doc);
             Util.SetGen(result, "1.0", "2.2");
             IEnumerable<XElement> reqdeclNodes =
                 from AnyElement in result.Descendants()
@@ -87,7 +87,7 @@ namespace org.redsl.Compiler
 
             if (precedingPackageDeclarationsArray != null && precedingPackageDeclarationsArray.Length > 0)
             {
-                XElement nearestPrecedingPackageDeclaration = precedingPackageDeclarationsArray[precedingPackageDeclarationsArray.Length - 1];
+                XElement nearestPrecedingPackageDeclaration = precedingPackageDeclarationsArray[^1];
                 string packagename = nearestPrecedingPackageDeclaration.Attribute("ID_STR").Value;
                 node.SetAttributeValue("package", packagename);
             }
@@ -109,7 +109,7 @@ namespace org.redsl.Compiler
         public static XDocument TidyPackageDeclarations(XDocument doc)
         {
             Util.CheckGen(doc, "1.0", "2.2");
-            XDocument result = new XDocument(doc);
+            XDocument result = new(doc);
             Util.SetGen(result, "1.0", "3");
             IEnumerable<XElement> packdeclNodes =
                 from AnyElement in result.Descendants()
@@ -119,8 +119,8 @@ namespace org.redsl.Compiler
                     )
                 select AnyElement;
 
-            XElement[] packdeclArry = packdeclNodes.ToArray();
-            SortedSet<string> packageNames = new SortedSet<string>();
+            XElement[] packdeclArry = [.. packdeclNodes];
+            SortedSet<string> packageNames = [];
             foreach (XElement node in packdeclArry)
             {
                 packageNames.Add(node.Attribute("ID_STR").Value);
@@ -137,7 +137,7 @@ namespace org.redsl.Compiler
         private static void CollectReqDeclsToPackage(XDocument target, string packageName)
         {
             XElement root = target.Root;
-            XElement newPackageNode = new XElement("package");
+            XElement newPackageNode = new("package");
             newPackageNode.SetAttributeValue("name", packageName);
             root.Add(newPackageNode);
             IEnumerable<XElement> reqdeclNodes =
@@ -153,7 +153,7 @@ namespace org.redsl.Compiler
 
         private static void MoveNodesToNewParent(XElement newParent, IEnumerable<XElement> nodes)
         {
-            XElement[] nodesArray = nodes.ToArray();
+            XElement[] nodesArray = [.. nodes];
             foreach (XElement node in nodesArray)
             {
                 node.Remove();
