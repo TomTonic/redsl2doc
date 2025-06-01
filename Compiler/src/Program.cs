@@ -33,6 +33,21 @@ namespace org.redsl.Compiler
                 string inputFile = opts.Input;
                 string joinedFile = null;
 
+                // if input is a directory instead of a file, check that the user has set the recurse option
+                if (Directory.Exists(opts.Input))
+                {
+                    if (!opts.Recurse)
+                    {
+                        Console.Error.WriteLine("Error: Input is a directory, but recurse option is not set. Please use the -r option to enable recursion.");
+                        Environment.Exit(1);
+                    }
+                }
+                else if (!File.Exists(opts.Input))
+                {
+                    Console.Error.WriteLine($"Error: Input file '{opts.Input}' does not exist.");
+                    Environment.Exit(1);
+                }
+
                 // Stage 00: Join ReDSL files if Recurse is enabled
                 if (opts.Recurse)
                 {
