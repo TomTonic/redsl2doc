@@ -5,6 +5,7 @@ using Antlr4.Runtime.Tree;
 using org.ReDSL.Parser;
 using org.redsl.Compiler.TokenTypes;
 using CommandLine;
+using System.IO;
 
 namespace org.redsl.Compiler
 {
@@ -12,48 +13,88 @@ namespace org.redsl.Compiler
     {
         public class Options
         {
-            [Option('i', "input", Required = true, HelpText = "The name of a text file containing a valid ReDSL document.")]
+            [Option('i', "input", Required = true, HelpText = "The name of a text file containing a valid ReDSL document, or in case of '-r', the name of the directory to recurse for ReDSL-files.")]
             public string Input { get; set; }
-            [Option('o', "Output", Required = true, HelpText = "The name of a directory where the output files will be written.")]
+            [Option('o', "output", Required = true, HelpText = "The name of a directory where the output files will be written.")]
             public string Output { get; set; }
-            [Option('v', "verbose", Required = false, HelpText = "Set output to verbose messages.")]
-            public bool Verbose { get; set; }
+            [Option('r', "recurse", Required = false, HelpText = "Recurse input directory for ReDSL files and join them into a single file before processing.")]
+            public bool Recurse { get; set; }
+            [Option('d', "debug", Required = false, HelpText = "Save intermediate files for debugging purposes.")]
+            public bool Debug { get; set; }
         }
 
-        //static string s = "file \"x\" {  §fgh{blll} package \"aa\" \n\r\n\r §1{ blabla bla bla \n\n blo blo \n blu }\n\r\n\r\t§2{}§3{} package \"b\" package \"c\" §asdf{asfrg jgoirjg}  }";
-        //static string ex1 = "/Users/tom/git/ReDSL/Compiler/testdata/ex2.redsl";
         public static void Main(string[] args)
         {
             Console.Write(Figgle.FiggleFonts.Standard.Render("ReDSL"));
             CommandLine.Parser.Default.ParseArguments<Options>(args).WithParsed<Options>(opts =>
+            {
+                // Generate a unique, temporally ordered prefix for this compiler run
+                string runPrefix = DateTime.UtcNow.ToString("yyyyMMdd_HHmmss_fff");
+                string inputFile = opts.Input;
+                string joinedFile = null;
+
+                // Stage 00: Join ReDSL files if Recurse is enabled
+                if (opts.Recurse)
                 {
-                    ICharStream stream = CharStreams.fromPath(opts.Input);
-                    //ReDSLLexer lexer = new ReDSLLexer(new AntlrInputStream(s));
-                    ReDSLLexer lexer = new(stream);
-                    CommonTokenStream tokens = new(lexer);
-                    ReDSLParser parser = new(tokens);
-                    ReDSLParser.ParseContext context = parser.parse();
-                    ParseTreeWalker walker = new();
-                    XMLBuildingListener listener = new();
-                    walker.Walk(listener, context);
-                    XDocument doc = listener.GetXDocument();
-                    if (opts.Verbose) Console.WriteLine();
-                    if (opts.Verbose) Console.WriteLine(doc.ToString());
-                    doc = Phase1.TidyTokens(doc); // this will delete superflouos tokens and prepare text tokens for assembly
-                    if (opts.Verbose) Console.WriteLine(doc.ToString());
-                    doc = Phase1.ReduceTextNodes(doc); // this will assemble consecutive text and white space tokens for easier text handling afterwards
-                    if (opts.Verbose) Console.WriteLine(doc.ToString());
-                    doc = Phase2.TokensToAttributes(doc); // this will move other tokens as attributes to their parents
-                    if (opts.Verbose) Console.WriteLine(doc.ToString());
-                    doc = Phase3.PropagateFileAttributes(doc);
-                    if (opts.Verbose) Console.WriteLine(doc.ToString());
-                    doc = Phase3.ResolvePackages(doc); // this will assign the package attribute to every requirement declaration
-                    if (opts.Verbose) Console.WriteLine(doc.ToString());
-                    doc = Phase3.TidyPackageDeclarations(doc); // this will reorganize all package declarations and move their requirements nodes there
-                    if (opts.Verbose) Console.WriteLine(doc.ToString());
-                    (new DocGen()).GenerateDocuments(doc, opts.Output);
+                    joinedFile = Path.Combine(opts.Output, $"{runPrefix}_00_joined.redsl");
+                    MainClass.JoinRedslFiles(opts.Input, joinedFile);
+                    inputFile = joinedFile;
                 }
+
+                ICharStream stream = CharStreams.fromPath(inputFile);
+                ReDSLLexer lexer = new(stream);
+                CommonTokenStream tokens = new(lexer);
+                ReDSLParser parser = new(tokens);
+                ReDSLParser.ParseContext context = parser.parse();
+                ParseTreeWalker walker = new();
+                XMLBuildingListener listener = new();
+                walker.Walk(listener, context);
+                XDocument doc = listener.GetXDocument();
+
+                void WriteDoc(string stage, XDocument document)
+                {
+                    string fileName = $"{runPrefix}_{stage}.xml";
+                    string filePath = Path.Combine(opts.Output, fileName);
+                    File.WriteAllText(filePath, document.ToString());
+                }
+
+                if (opts.Debug) WriteDoc("01_initial", doc);
+                doc = Phase1.TidyTokens(doc);
+                if (opts.Debug) WriteDoc("02_tidy_tokens", doc);
+                doc = Phase1.ReduceTextNodes(doc);
+                if (opts.Debug) WriteDoc("03_reduce_text_nodes", doc);
+                doc = Phase2.TokensToAttributes(doc);
+                if (opts.Debug) WriteDoc("04_tokens_to_attributes", doc);
+                doc = Phase3.PropagateFileAttributes(doc);
+                if (opts.Debug) WriteDoc("05_propagate_file_attributes", doc);
+                doc = Phase3.ResolvePackages(doc);
+                if (opts.Debug) WriteDoc("06_resolve_packages", doc);
+                doc = Phase3.TidyPackageDeclarations(doc);
+                if (opts.Debug) WriteDoc("07_tidy_package_declarations", doc);
+                (new DocGen()).GenerateDocuments(doc, opts.Output);
+
+                if (!opts.Debug && joinedFile != null && File.Exists(joinedFile))
+                {
+                    File.Delete(joinedFile);
+                }
+            }
             );
         }
+
+        public static void JoinRedslFiles(string inputDirectory, string outputFile)
+        {
+            var files = Directory.GetFiles(inputDirectory, "*.redsl", SearchOption.AllDirectories);
+            using var writer = new StreamWriter(outputFile);
+            foreach (var file in files)
+            {
+                var content = File.ReadAllText(file);
+                var fileName = Path.GetFileName(file).Replace("'", "\\'");
+                writer.WriteLine($"file \"{fileName}\" {{" + Environment.NewLine);
+                writer.WriteLine(content);
+                writer.WriteLine("}" + Environment.NewLine);
+            }
+        }
+
+
     }
 }
