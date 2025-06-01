@@ -123,9 +123,46 @@ namespace org.redsl.Compiler
             {
                 throw new Exception("The output parameter must be the name of an existing directory");
             }
-            //if (!basefilename.EndsWith(Path.PathSeparator)) basefilename += Path.PathSeparator;
-            string result = basefilename + documentTitle + ".docx";
+            var safeTitle = ToLegalFileName(documentTitle);
+            string result = Path.Combine(basefilename, safeTitle + ".docx");
             return result;
+        }
+
+        public static string ToLegalFileName(string input)
+        {
+            // Define invalid characters for Windows, Linux, and macOS
+            char[] invalidChars = Path.GetInvalidFileNameChars();
+            string cleaned = input;
+
+            // Replace invalid characters with underscore
+            foreach (char c in invalidChars)
+            {
+                cleaned = cleaned.Replace(c, '_');
+            }
+
+            // Optionally trim whitespace and limit length (Windows max 255)
+            cleaned = cleaned.Trim();
+            if (cleaned.Length > 255)
+                cleaned = cleaned[..255];
+
+            // Avoid reserved Windows filenames (CON, PRN, AUX, NUL, COM1, LPT1, etc.)
+            string[] reservedNames = {
+                "CON", "PRN", "AUX", "NUL",
+                "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
+                "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
+            };
+            string upper = Path.GetFileNameWithoutExtension(cleaned).ToUpperInvariant();
+            string ext = Path.GetExtension(cleaned);
+            if (Array.Exists(reservedNames, r => r == upper))
+            {
+                cleaned = $"_{cleaned}";
+            }
+
+            // Avoid empty filename
+            if (string.IsNullOrWhiteSpace(cleaned))
+                cleaned = "_";
+
+            return cleaned;
         }
 
         private static void AddStyles(WordprocessingDocument doc)
