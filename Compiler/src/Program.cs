@@ -6,6 +6,7 @@ using org.ReDSL.Parser;
 using org.redsl.Compiler.TokenTypes;
 using CommandLine;
 using System.IO;
+using Figgle;
 
 namespace org.redsl.Compiler
 {
