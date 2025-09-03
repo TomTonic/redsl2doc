@@ -1,0 +1,33 @@
+name: Build Compiler
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Generate parser code with ANTLR
+        run: bash generateParserCode.sh
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0'
+
+      - name: Pack compiler for all platforms
+        run: bash buildCompiler.sh
+
+      - name: Pack compiler for all platforms
+        run: bash packCompiler.sh
