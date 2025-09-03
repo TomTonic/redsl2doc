@@ -57,4 +57,4 @@ jobs:
           path: |
             Compiler/bin/Release/net8.0/linux-x64/publish/Compiler
             Compiler/bin/Release/net8.0/win-x64/publish/Compiler.exe
-            Compiler/bin/Release/net8.0/osx-x64/publish/Compiler
+            Compiler/bin/Release/net8.0/osx-arm64/publish/Compiler
