@@ -1,0 +1,51 @@
+name: Build Compiler
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Generate parser code with ANTLR
+        run: bash generateParserCode.sh
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0'
+
+        # Initializes the CodeQL tools for scanning. The Java code is generated, so only check C#
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3.29.0
+        with:
+          languages: "csharp"
+          # If you wish to specify custom queries, you can do so here or in a config file.
+          # By default, queries listed here will override any specified in a config file.
+          # Prefix the list here with "+" to use these queries and those in the config file.
+
+      - name: Build compiler
+        run: bash buildCompiler.sh
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3.29.0
+        with:
+          category: "/language:csharp"
+
+      - name: Pack compiler for all platforms
+        run: bash packCompiler.sh
