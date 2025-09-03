@@ -7,6 +7,7 @@ using org.redsl.Compiler.TokenTypes;
 using CommandLine;
 using System.IO;
 using Figgle;
+using Figgle.Fonts;
 
 namespace org.redsl.Compiler
 {
@@ -26,7 +27,7 @@ namespace org.redsl.Compiler
 
         public static void Main(string[] args)
         {
-            Console.Write(Figgle.FiggleFonts.Standard.Render("ReDSL"));
+            Console.Write(FiggleFonts.Standard.Render("ReDSL"));
             CommandLine.Parser.Default.ParseArguments<Options>(args).WithParsed<Options>(opts =>
             {
                 // Generate a unique, temporally ordered prefix for this compiler run
