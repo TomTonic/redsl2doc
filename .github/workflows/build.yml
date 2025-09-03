@@ -1,4 +1,4 @@
-name: Build Compiler
+name: Build Parser and Compiler
 
 on:
   push:
@@ -49,3 +49,12 @@ jobs:
 
       - name: Pack compiler for all platforms
         run: bash packCompiler.sh
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: compiler-artifacts
+          path: |
+            Compiler/bin/Release/net8.0/linux-x64/publish/Compiler
+            Compiler/bin/Release/net8.0/win-x64/publish/Compiler.exe
+            Compiler/bin/Release/net8.0/osx-x64/publish/Compiler
