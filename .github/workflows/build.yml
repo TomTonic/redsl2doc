@@ -26,8 +26,22 @@ jobs:
         with:
           dotnet-version: '8.0'
 
-      - name: Pack compiler for all platforms
+        # Initializes the CodeQL tools for scanning. The Java code is generated, so only check C#
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3.29.0
+        with:
+          languages: "csharp"
+          # If you wish to specify custom queries, you can do so here or in a config file.
+          # By default, queries listed here will override any specified in a config file.
+          # Prefix the list here with "+" to use these queries and those in the config file.
+
+      - name: Build compiler
         run: bash buildCompiler.sh
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3.29.0
+        with:
+          category: "/language:csharp"
 
       - name: Pack compiler for all platforms
         run: bash packCompiler.sh
